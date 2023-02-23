@@ -194,16 +194,17 @@ type CompetitionClient struct {
 }
 
 func (c *CompetitionClient) SetSubmissionInfo(
-	index *competition.CompetitionIndex, info *competition.SubmissionInfo,
+	competitionId string, info *competition.SubmissionInfo,
 ) error {
 	_, err := c.cli.SetSubmissionInfo(
 		context.Background(),
 		&protocol.SubmissionInfo{
-			CompetitionId: index.Id,
-			Phase:         index.Phase,
+			CompetitionId: competitionId,
+			Phase:         info.Phase,
 			Id:            info.Id,
 			Status:        info.Status,
 			Score:         info.Score,
+			PlayerId:      info.PlayerId,
 		},
 	)
 
