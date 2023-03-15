@@ -1,10 +1,7 @@
 package cloud
 
 type CloudPod struct {
-	Id         string
-	User       string
-	ProjectId  string
-	LastCommit string
+	Id string
 }
 
 type PodInfo struct {

@@ -62,6 +62,18 @@ func NewEvaluateClient(endpoint string) (*EvaluateClient, error) {
 	}, nil
 }
 
+func NewCloudClient(endpoint string) (*CloudClient, error) {
+	c, err := newConn(endpoint)
+	if err != nil {
+		return nil, err
+	}
+
+	return &CloudClient{
+		clientConn: &c,
+		cli:        protocol.NewCloudClient(c.conn),
+	}, nil
+}
+
 func NewCompetitionClient(endpoint string) (*CompetitionClient, error) {
 	c, err := newConn(endpoint)
 	if err != nil {
@@ -195,10 +207,11 @@ type CloudClient struct {
 	cli protocol.CloudClient
 }
 
-func (c *CloudClient) SetPodInfo(index *cloud.CloudPod, info *cloud.PodInfo) error {
+func (c *CloudClient) SetPodInfo(pod *cloud.CloudPod, info *cloud.PodInfo) error {
 	_, err := c.cli.SetPodInfo(
 		context.Background(),
 		&protocol.PodInfo{
+			PodId:     pod.Id,
 			Error:     info.Error,
 			AccessUrl: info.AccessURL,
 		},
