@@ -5,6 +5,7 @@ import (
 
 	"google.golang.org/grpc"
 
+	"github.com/opensourceways/xihe-grpc-protocol/grpc/cloud"
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/competition"
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/evaluate"
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/finetune"
@@ -181,6 +182,25 @@ func (c *EvaluateClient) SetEvaluateInfo(index *evaluate.EvaluateIndex, info *ev
 			TrainingId: index.TrainingID,
 			Error:      info.Error,
 			AccessUrl:  info.AccessURL,
+		},
+	)
+
+	return err
+}
+
+// Cloud
+type CloudClient struct {
+	*clientConn
+
+	cli protocol.CloudClient
+}
+
+func (c *CloudClient) SetPodInfo(index *cloud.CloudPod, info *cloud.PodInfo) error {
+	_, err := c.cli.SetPodInfo(
+		context.Background(),
+		&protocol.PodInfo{
+			Error:     info.Error,
+			AccessUrl: info.AccessURL,
 		},
 	)
 

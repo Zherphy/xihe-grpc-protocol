@@ -11,8 +11,8 @@ endef
 
 protocol:
 	$(call tips,Gen Protocol)
-	$(protoc) -I ./proto --go_out=./protocol training.proto inference.proto evaluate.proto competition.proto finetune.proto
-	$(protoc) -I ./proto --go-grpc_out=./protocol training.proto inference.proto evaluate.proto competition.proto finetune.proto
+	$(protoc) -I ./proto --go_out=./protocol training.proto inference.proto evaluate.proto competition.proto finetune.proto cloud.proto
+	$(protoc) -I ./proto --go-grpc_out=./protocol training.proto inference.proto evaluate.proto competition.proto finetune.proto cloud.proto
 
 .PHONY: clean
 

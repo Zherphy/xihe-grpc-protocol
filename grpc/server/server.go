@@ -9,6 +9,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 
+	"github.com/opensourceways/xihe-grpc-protocol/grpc/cloud"
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/competition"
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/evaluate"
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/finetune"
@@ -24,6 +25,7 @@ type Server interface {
 	RegisterTrainingServer(training.TrainingService) error
 	RegisterEvaluateServer(evaluate.EvaluateService) error
 	RegisterInferenceServer(inference.InferenceService) error
+	RegisterCloudServer(cloud.CloudService) error
 	RegisterCompetitionServer(competition.CompetitionService) error
 }
 
@@ -87,6 +89,20 @@ func (impl serverImpl) RegisterEvaluateServer(s evaluate.EvaluateService) error 
 	}
 
 	protocol.RegisterEvaluateServer(impl.server, &evaluateServer{s: s})
+
+	return nil
+}
+
+func (impl serverImpl) RegisterCloudServer(s cloud.CloudService) error {
+	if s == nil {
+		return errors.New("invliad service")
+	}
+
+	if impl.server == nil {
+		return errors.New("no server")
+	}
+
+	protocol.RegisterCloudServer(impl.server, &cloudServer{s: s})
 
 	return nil
 }
@@ -223,6 +239,28 @@ func (t *evaluateServer) SetEvaluateInfo(ctx context.Context, v *protocol.Evalua
 
 	// Must return new(protocol.Result), or grpc will failed.
 	return new(protocol.EvaluateResult), t.s.SetEvaluateInfo(&index, &info)
+}
+
+// cloud
+type cloudServer struct {
+	s cloud.CloudService
+	protocol.UnimplementedCloudServer
+}
+
+func (t *cloudServer) SetCloudInfo(ctx context.Context, v *protocol.PodInfo) (
+	*protocol.PodInfoResult, error,
+) {
+	pod := cloud.CloudPod{
+		Id: v.GetPodId(),
+	}
+
+	info := cloud.PodInfo{
+		Error:     v.GetError(),
+		AccessURL: v.GetAccessUrl(),
+	}
+
+	// Must return new(protocol.Result), or grpc will failed.
+	return new(protocol.PodInfoResult), t.s.SetCloudInfo(&pod, &info)
 }
 
 // competition
