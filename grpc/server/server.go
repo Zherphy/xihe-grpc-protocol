@@ -260,7 +260,7 @@ func (t *cloudServer) SetCloudInfo(ctx context.Context, v *protocol.PodInfo) (
 	}
 
 	// Must return new(protocol.Result), or grpc will failed.
-	return new(protocol.PodInfoResult), t.s.SetCloudInfo(&pod, &info)
+	return new(protocol.PodInfoResult), t.s.SetPodInfo(&pod, &info)
 }
 
 // competition
