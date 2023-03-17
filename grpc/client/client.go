@@ -2,7 +2,6 @@ package client
 
 import (
 	"context"
-	"fmt"
 
 	"google.golang.org/grpc"
 
@@ -64,7 +63,6 @@ func NewEvaluateClient(endpoint string) (*EvaluateClient, error) {
 }
 
 func NewCloudClient(endpoint string) (*CloudClient, error) {
-	fmt.Printf("\"3\": %v\n", "3")
 	c, err := newConn(endpoint)
 	if err != nil {
 		return nil, err
@@ -210,7 +208,6 @@ type CloudClient struct {
 }
 
 func (c *CloudClient) SetPodInfo(pod *cloud.CloudPod, info *cloud.PodInfo) error {
-	fmt.Printf("\"2\": %v\n", "2")
 	_, err := c.cli.SetPodInfo(
 		context.Background(),
 		&protocol.PodInfo{
