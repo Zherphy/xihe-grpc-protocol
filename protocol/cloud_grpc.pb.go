@@ -70,6 +70,7 @@ type UnsafeCloudServer interface {
 }
 
 func RegisterCloudServer(s grpc.ServiceRegistrar, srv CloudServer) {
+	fmt.Printf("srv: %+v\n", srv)
 	s.RegisterService(&Cloud_ServiceDesc, srv)
 }
 
