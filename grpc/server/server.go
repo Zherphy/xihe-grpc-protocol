@@ -249,7 +249,7 @@ type cloudServer struct {
 	protocol.UnimplementedCloudServer
 }
 
-func (t *cloudServer) SetCloudInfo(ctx context.Context, v *protocol.PodInfo) (
+func (t *cloudServer) SetPodInfo(ctx context.Context, v *protocol.PodInfo) (
 	*protocol.PodInfoResult, error,
 ) {
 	pod := cloud.CloudPod{
