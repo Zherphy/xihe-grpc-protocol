@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net"
 
 	"github.com/opensourceways/community-robot-lib/interrupts"
@@ -103,7 +102,6 @@ func (impl serverImpl) RegisterCloudServer(s cloud.CloudService) error {
 		return errors.New("no server")
 	}
 
-	fmt.Printf("\"1\": %v\n", "1")
 	protocol.RegisterCloudServer(impl.server, &cloudServer{s: s})
 
 	return nil

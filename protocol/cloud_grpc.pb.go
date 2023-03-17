@@ -8,7 +8,6 @@ package protocol
 
 import (
 	context "context"
-	"fmt"
 
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
@@ -36,7 +35,6 @@ func NewCloudClient(cc grpc.ClientConnInterface) CloudClient {
 }
 
 func (c *cloudClient) SetPodInfo(ctx context.Context, in *PodInfo, opts ...grpc.CallOption) (*PodInfoResult, error) {
-	fmt.Printf("\"55\": %v\n", "55")
 	out := new(PodInfoResult)
 	err := c.cc.Invoke(ctx, "/cloud.Cloud/SetPodInfo", in, out, opts...)
 	if err != nil {
@@ -70,7 +68,6 @@ type UnsafeCloudServer interface {
 }
 
 func RegisterCloudServer(s grpc.ServiceRegistrar, srv CloudServer) {
-	fmt.Printf("srv: %+v\n", srv)
 	s.RegisterService(&Cloud_ServiceDesc, srv)
 }
 
@@ -80,7 +77,6 @@ func _Cloud_SetPodInfo_Handler(srv interface{}, ctx context.Context, dec func(in
 		return nil, err
 	}
 	if interceptor == nil {
-		fmt.Printf("\"66\": %v\n", "66")
 		return srv.(CloudServer).SetPodInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
@@ -88,7 +84,6 @@ func _Cloud_SetPodInfo_Handler(srv interface{}, ctx context.Context, dec func(in
 		FullMethod: "/cloud.Cloud/SetPodInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		fmt.Printf("\"77\": %v\n", "77")
 		return srv.(CloudServer).SetPodInfo(ctx, req.(*PodInfo))
 	}
 	return interceptor(ctx, in, info, handler)
