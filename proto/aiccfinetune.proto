@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package aiccfinetune;
+
+option go_package = "../protocol";
+
+message AICCFinetuneInfo {
+  string id               = 1;
+  string user             = 2;
+  string status           = 3;
+  string log_path         = 4;
+  string output_zip_path  = 5;
+  int32  duration         = 6;
+  string model            = 7;
+}
+
+message AICCFinetuneResult {}
+
+service AICCFinetune {
+  rpc SetAICCFinetuneInfo(AICCFinetuneInfo) returns (AICCFinetuneResult) {}
+}
