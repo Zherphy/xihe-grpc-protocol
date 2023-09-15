@@ -5,12 +5,10 @@ import (
 
 	"google.golang.org/grpc"
 
+	"github.com/opensourceways/xihe-grpc-protocol/grpc/aiccfinetune"
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/cloud"
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/competition"
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/evaluate"
-
-	"github.com/opensourceways/xihe-grpc-protocol/grpc/aiccfinetune"
-
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/finetune"
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/inference"
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/training"

@@ -9,6 +9,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 
+	"github.com/opensourceways/xihe-grpc-protocol/grpc/aiccfinetune"
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/cloud"
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/competition"
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/evaluate"
@@ -27,6 +28,7 @@ type Server interface {
 	RegisterInferenceServer(inference.InferenceService) error
 	RegisterCloudServer(cloud.CloudService) error
 	RegisterCompetitionServer(competition.CompetitionService) error
+	RegisterAICCFinetuneServer(aiccfinetune.AICCFinetuneService) error
 }
 
 func NewServer() Server {
@@ -47,6 +49,20 @@ func (impl serverImpl) RegisterTrainingServer(s training.TrainingService) error 
 	}
 
 	protocol.RegisterTrainingServer(impl.server, &trainingServer{s: s})
+
+	return nil
+}
+
+func (impl serverImpl) RegisterAICCFinetuneServer(s aiccfinetune.AICCFinetuneService) error {
+	if s == nil {
+		return errors.New("invliad service")
+	}
+
+	if impl.server == nil {
+		return errors.New("no server")
+	}
+
+	protocol.RegisterAICCFinetuneServer(impl.server, &aiccFinetuneServer{s: s})
 
 	return nil
 }
@@ -166,6 +182,32 @@ func (t *trainingServer) SetTrainingInfo(ctx context.Context, v *protocol.Traini
 
 	// Must return new(protocol.Result), or grpc will failed.
 	return new(protocol.TrainingResult), t.s.SetTrainingInfo(&index, &info)
+}
+
+// aicc finetune
+type aiccFinetuneServer struct {
+	s aiccfinetune.AICCFinetuneService
+	protocol.UnimplementedAICCFinetuneServer
+}
+
+func (t *aiccFinetuneServer) SetAICCFinetuneInfo(ctx context.Context, v *protocol.AICCFinetuneInfo) (
+	*protocol.AICCFinetuneResult, error,
+) {
+	index := aiccfinetune.AICCFinetuneIndex{
+		Id:    v.GetId(),
+		User:  v.GetUser(),
+		Model: v.GetModel(),
+	}
+
+	info := aiccfinetune.AICCFinetuneInfo{
+		OutputZipPath: v.GetOutputZipPath(),
+		LogPath:       v.GetLogPath(),
+		Status:        v.GetStatus(),
+		Duration:      int(v.GetDuration()),
+	}
+
+	// Must return new(protocol.Result), or grpc will failed.
+	return new(protocol.AICCFinetuneResult), t.s.SetAICCFinetuneInfo(&index, &info)
 }
 
 // finetune
