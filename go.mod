@@ -3,7 +3,7 @@ module github.com/opensourceways/xihe-grpc-protocol
 go 1.18
 
 require (
-	github.com/opensourceways/community-robot-lib v0.0.0-20221016001453-0602b5e39d95
+	github.com/opensourceways/community-robot-lib v0.0.0-20231018034126-a664e14dbb9d
 	github.com/sirupsen/logrus v1.9.3
 	google.golang.org/grpc v1.56.2
 	google.golang.org/protobuf v1.30.0
