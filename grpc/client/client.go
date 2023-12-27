@@ -5,6 +5,7 @@ import (
 
 	"google.golang.org/grpc"
 
+	"github.com/opensourceways/xihe-grpc-protocol/grpc/aiccfinetune"
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/cloud"
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/competition"
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/evaluate"
@@ -35,6 +36,18 @@ func NewFinetuneClient(endpoint string) (*FinetuneClient, error) {
 	return &FinetuneClient{
 		clientConn: &c,
 		cli:        protocol.NewFinetuneClient(c.conn),
+	}, nil
+}
+
+func NewAICCFinetuneClient(endpoint string) (*AICCFinetuneClient, error) {
+	c, err := newConn(endpoint)
+	if err != nil {
+		return nil, err
+	}
+
+	return &AICCFinetuneClient{
+		clientConn: &c,
+		cli:        protocol.NewAICCFinetuneClient(c.conn),
 	}, nil
 }
 
@@ -152,6 +165,29 @@ func (c *FinetuneClient) SetFinetuneInfo(index *finetune.FinetuneIndex, info *fi
 		},
 	)
 
+	return err
+}
+
+// AICC training
+type AICCFinetuneClient struct {
+	*clientConn
+
+	cli protocol.AICCFinetuneClient
+}
+
+func (c *AICCFinetuneClient) SetAICCFinetuneInfo(index *aiccfinetune.AICCFinetuneIndex, info *aiccfinetune.AICCFinetuneInfo) error {
+	_, err := c.cli.SetAICCFinetuneInfo(
+		context.Background(),
+		&protocol.AICCFinetuneInfo{
+			Id:            index.Id,
+			User:          index.User,
+			LogPath:       info.LogPath,
+			OutputZipPath: info.OutputZipPath,
+			Status:        info.Status,
+			Duration:      int32(info.Duration),
+			Model:         index.Model,
+		},
+	)
 	return err
 }
 
