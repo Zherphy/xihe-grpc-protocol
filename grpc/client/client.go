@@ -256,6 +256,14 @@ func (c *CloudClient) SetPodInfo(pod *cloud.CloudPod, info *cloud.PodInfo) error
 	return err
 }
 
+func (c *CloudClient) ReleasePod(id string) error {
+	_, err := c.cli.ReleasePod(context.Background(), &protocol.ReleasePodMessage{
+		PodId: id,
+	})
+
+	return err
+}
+
 type CompetitionClient struct {
 	*clientConn
 

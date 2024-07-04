@@ -12,6 +12,13 @@ message PodInfo {
 
 message PodInfoResult {}
 
+message ReleasePodMessage {
+  string pod_id = 1;
+}
+
+message ReleasePodMessageResult {}
+
 service Cloud {
   rpc SetPodInfo(PodInfo) returns (PodInfoResult) {}
+  rpc ReleasePod(ReleasePodMessage) returns (ReleasePodMessageResult) {}
 }

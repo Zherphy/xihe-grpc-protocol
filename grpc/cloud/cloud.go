@@ -11,4 +11,5 @@ type PodInfo struct {
 
 type CloudService interface {
 	SetPodInfo(*CloudPod, *PodInfo) error
+	ReleasePod(string) error
 }

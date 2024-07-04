@@ -305,6 +305,13 @@ func (t *cloudServer) SetPodInfo(ctx context.Context, v *protocol.PodInfo) (
 	return new(protocol.PodInfoResult), t.s.SetPodInfo(&pod, &info)
 }
 
+func (t *cloudServer) ReleasePod(ctx context.Context, m *protocol.ReleasePodMessage) (
+	*protocol.ReleasePodMessageResult, error,
+) {
+	// Must return new(protocol.Result), or grpc will failed.
+	return new(protocol.ReleasePodMessageResult), t.s.ReleasePod(m.GetPodId())
+}
+
 // competition
 type competitionServer struct {
 	s competition.CompetitionService
